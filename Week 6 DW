@@ -1,0 +1,123 @@
+"""
+Created on Sat Mar  2 17:29:33 2019
+
+@author: Alice Jingyu
+"""
+#Cohort Question 1
+def reverse(astring):
+    return astring[::-1]
+    
+print(reverse('I am testing'))
+
+#Cohort Question 2
+def check_password(string):
+    check = False
+    if len(string) >= 8:
+        check = True
+    count = 0
+    for i in range(len(string)):
+        if string[i].isdigit():
+            count += 1 
+    if count < 2:
+        check = False
+
+    return check
+    
+print(check_password('testtest22'))
+
+#Cohort Question 3
+def longest_common_prefix(string1, string2):
+    longest_pre = []
+    for i in range(len(string1)):
+        if len(string2) > i and string1[i] == string2[i]:
+            longest_pre.append(string2[i])
+        else:
+            return "".join(longest_pre)
+    return "".join(longest_pre)
+    
+print(longest_common_prefix('destination','destiny'))      
+
+#Question 4
+import math as mt
+class Coordinate:
+    x = 0
+    y = 0
+    
+f = open('xy.dat','r')
+
+def get_maxmin_mag(f):
+    p = Coordinate()
+    maxp = Coordinate()
+    minp = Coordinate()
+    minp.x = 0.0
+    minp.y = 0.0
+    maxp.x=0.0
+    maxp.y=0.0
+    p.x = 0.0
+    p.y = 0.0
+    a = f.readline()
+    val = a.split()
+    p.x= float(val[0])
+    p.y= float(val[1])
+    mag = mt.sqrt((p.x)**2 + (p.y)**2)
+    maxmag = mag
+    minmag = mag
+    while a:
+        values = a.split()
+        p.x= float(values[0])
+        p.y= float(values[1])
+        mag = mt.sqrt((p.x)**2 + (p.y)**2)
+        if mag >= maxmag:
+            maxmag = mag 
+            maxp.x = p.x
+            maxp.y = p.y
+        if mag < minmag:
+            minmag = mag
+            minp.x = p.x
+            minp.y = p.y
+        a = f.readline()
+    return maxp,minp
+    
+"""
+Created on Tue Mar 12 01:56:36 2019
+
+@author: Alice Jingyu
+"""
+
+#HW 1
+def binary_to_decimal(binstr):
+    decimal = 0
+    for ix in range(len(binstr)):
+        decimal += int(binstr[ix]) * 2**( len(binstr)-(ix+1) )
+    return decimal
+
+#HW 2
+def uncompress(string):
+    ls = list(string) 
+    for i in range(len(ls)):
+        if ls[i].isdigit():
+            ls[i+1] *= int(ls[i])
+    return "".join([i for i in ls if not i.isdigit()])
+
+#HW 3
+def get_base_counts2(dna):
+    if any(not c.isalpha() for c in dna) or any(c.islower() for c in dna):
+        return 'The input DNA string is invalid'   
+    else:
+        return {'A': dna.count('A') , 'C': dna.count('C') , 'G': dna.count('G') ,'T': dna.count('T')}
+    
+#HW 4 
+def get_fundamental_constants(f):
+    readline = f.readlines() 
+    return dict(zip([[x.split() for x in readline][2:][i][0] for i in range(len(readline)-2)], list(map(float,[[x.split() for x in readline][2:][i][1] for i in range(len(readline)-2)]))))
+
+#HW 5
+def process_scores(f):
+    str_lst = f.readline().split()
+    total = 0
+    num_items = 0
+    for item in str_lst:
+        total += float(item)
+        num_items += 1
+    average = total / num_items
+    return total, average
