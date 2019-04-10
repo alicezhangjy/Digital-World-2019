@@ -1,0 +1,126 @@
+"""
+Created on Tue Feb 12 13:43:09 2019
+
+@author: Alice Jingyu
+"""
+
+#Cohort 1
+def list_sum(list):
+    sum = 0
+    for i in list:
+        sum += i 
+    return sum
+
+print(list_sum([4.25,5,10.75]))
+
+#Cohort 2
+def minmax_in_list(list):
+    min = None
+    max = None
+    for i in range(len(list)):
+        if min is None or list[i] <= min:
+            min = list[i]
+        if max is None or list[i] >= max:
+            max = list[i]
+    return min,max
+
+print(minmax_in_list([1,2,3,10]))
+            
+
+#Cohort 2 Example
+from numpy import arange, cos, sin, pi
+import matplotlib.pyplot as plt
+
+x = arange(0.0, 5.0, 0.05)
+y = cos(pi * x)
+
+fig, ax = plt.subplots(figsize=(10,8))
+ax.set(xlabel= 'my boi',
+       ylabel= 'also my boi',
+       title= 'bois')
+plt.legend(loc='best', fontsize = 'large')
+ax.scatter(x, y, color='pink', linestyle='dashed', marker='x', label= 'me')
+
+
+plt.show()
+
+
+#Cohort Questions
+#Question 2
+def minmax_in_list(ls):
+   largest = None
+   smallest = None
+   for i in ls:
+       print(i)
+       if largest is None or i > largest :
+           largest = i
+   smallest = ls[0]
+   for number in ls:
+       while smallest > number:
+           smallest = number
+   return (smallest, largest)
+
+print(minmax_in_list([1,1,3,0]))
+
+#Question 3
+def is_palindrome(num):
+    is_palindrome = False
+    counter = 0
+    last = -1 
+    for i in num: 
+        if num(counter) == num(last):
+            is_palindrome = True
+            counter +=1 
+            last -= 1
+        else: 
+            is_palindrome = False
+    return is_palindrome
+    
+#Problem set 3
+
+#Question 1
+def temp_convert(choice, temp):
+    
+    if choice == 'C': 
+        conversion = (temp - 32) * ( 5 / 9 )
+    elif choice == 'F':
+        conversion = (temp * (9 / 5)) + 32
+    else: 
+        conversion = None
+        
+    return conversion
+
+#Question 2
+def get_even_list(ls):
+    newlist = []
+    
+    for i in ls:
+        if i % 2 == 0: 
+            newlist.append(i)
+    return newlist 
+
+#Question 3
+def is_prime(num):
+    is_prime = False
+    for i in range (2,num):
+        if num % i != 0:
+            is_prime = True 
+    return is_prime
+
+print(is_prime(29))
+
+#Quesion 4
+from math import exp
+
+
+def approx_ode(h, t0, y0, tn):
+    no_of_rounds = int((tn-t0)/h)
+    for i in range(no_of_rounds):
+        y0 = y0 + h * (3 + exp(-t0) - (1/2 * y0))
+        t0 += h 
+    yn_rounded = round(y0,3)
+    return yn_rounded
+    
+    
+print(approx_ode(0.1, 0 , 1, 0))
+    
