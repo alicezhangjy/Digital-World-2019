@@ -1,0 +1,102 @@
+"""
+Created on Mon Feb 18 09:37:14 2019
+
+@author: Alice Jingyu
+"""
+#Question 2 
+def compound_value_months(amt, rate, months):
+    value_in_bank = 0
+    new_rate = rate / 12
+    try:
+        for i in range(months): 
+        new_amt = (amt + value_in_bank) * (1 + new_rate)
+        value_in_bank = new_amt
+    except: 
+        value_in_bank = 0.0
+    
+    return round(value_in_bank,2)
+
+print(compound_value_months(0,0,0))
+
+#Question 3
+
+def find_average(lst):
+    count = 0
+    list_of_averages = []
+    overallsum = 0
+    for i in range(len(lst)):
+        sublistsum = 0
+        for j in range(len(lst[i])):
+            sublistsum += lst[i][j]
+            overallsum += lst[i][j]
+            count += 1
+        avg = sublistsum / len(lst[i])
+        list_of_averages.append(avg)
+    list_of_averages.append(overallsum / count)
+    return list_of_averages
+
+print(find_average([[3,4], [5,6,7], [-1,2,8]]))
+
+#Question 4
+
+def transpose_matrix(matrix):
+    transposed = [[] for i in range(len(matrix[0]))]
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            transposed[j].append(matrix[i][j])
+    return transposed
+
+
+#Question 5
+#Correct Ver: 
+def get_details(name, key, lst):
+    info = None
+    for i in lst: 
+        if name in i.values():
+            info = i.get(key)
+    return info
+
+phonebook =[{ 'name ':'Andrew ', 'mobile_phone ':9477865 , 'office_phone ':6612345 , 'email ':'andrew@sutd . edu.sg '},{'name ':'Bobby ',' mobile_phone ':8123498 , 'office_phone ':6654321 , 'email ': 'bobby@sutd .edu.sg '}]
+
+print( get_details ('Andrew ', 'mobile_phone ', phonebook ))
+
+#Question 6
+def get_base_counts(dna):
+    a_count = 0
+    c_count = 0
+    t_count = 0
+    g_count = 0
+    for i in dna: 
+        if i == 'A':
+            a_count += 1
+        elif i == 'C':
+            c_count += 1
+        elif i == 'T':
+            t_count += 1
+        elif i == 'G':
+            g_count += 1
+        else: 
+            return "The input DNA string is invalid"
+    dna_count = {'A': a_count, 'C': c_count, 'G': g_count, 'T':t_count}
+    return dna_count
+
+print(get_base_counts('AAB'))
+
+def get_base_counts(dna):
+    counts = {}
+    bases = 'ACGT' 
+    for base in bases:
+        counts[base] = 0
+    
+    for char in dna:
+        if char in bases:
+            counts[char] += 1
+        else:
+            return 'The input DNA string is invalid'
+        
+    
+    return counts
+
+print(get_base_counts('AACCGT'))
+            
+        
