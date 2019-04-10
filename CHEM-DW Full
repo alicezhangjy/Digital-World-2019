@@ -1,0 +1,36 @@
+#Week 3
+#Question 1
+
+import numpy as py
+import scipy.constants as c
+
+def deg_to_rad(deg):
+    result = deg * (c.pi / 180) 
+    result_rounded = round(result,5)
+    return result_rounded
+ 
+def rad_to_deg(rad):
+    result = rad * (180 / c.pi)
+    result_rounded = round(result,5)
+    return result_rounded
+    
+#Question 2
+import numpy as np
+
+def spherical_to_cartesian(r,theta,phi):
+    x = r * np.sin(theta) * np.cos(phi) 
+    y = r * np.sin(theta) * np.sin(phi) 
+    z = r * np.cos(theta)
+    return round(x,5), round(y,5), round(z,5)
+
+def cartesian_to_spherical(x, y, z):
+    r = np.sqrt((x ** 2) + (y ** 2 ) + (z ** 2))
+    phi = np.arccos(z / r)
+    try:
+        theta = np.arctan(y / x)
+        
+    except ZeroDivisionError:
+        theta = 0.0
+        
+    return round(r,5), round(phi,5), round(theta,5)
+    
