@@ -1,0 +1,170 @@
+"""
+Created on Mon Feb  4 09:19:39 2019
+
+@author: Alice Jingyu
+"""
+
+#Question 1
+def position_velocity(v0, t):
+    g = 9.81
+    height = (v0 * t) - (0.5 * g * (t ** 2))
+    velocity = v0 - (g * t)
+    return round(height, 2), round(velocity, 2)
+
+print (position_velocity(5.0 , 10.0))
+
+print (position_velocity(5.0 , 0.0))
+
+print (position_velocity(0.0 , 5.0))
+
+#Question 2
+weight = float(input("What is your weight in kg?"))
+height = float(input("What is your height in metres?"))
+
+def bmi(weight, height):
+    body_mass_index = weight / (height ** 2)
+    return round(body_mass_index, 2)
+
+print(bmi(weight,height))
+
+#Question 2 submitted on vocareum
+
+def bmi(weight, height):
+    body_mass_index = weight / ((height/100) ** 2)
+    return round(body_mass_index, 1)
+
+#Question 3
+from math import sqrt
+class Coordinate: 
+    x = 0.0    
+    y = 0.0
+
+def length_of_side(p1, p2):
+    distance = sqrt((p2.x-p1.x)**2 + (p2.y-p1.y)**2)
+    return distance
+
+    
+def area_of_triangle(p1, p2, p3):
+    side1 = length_of_side(p1,p2)
+    side2 = length_of_side(p2,p3)
+    side3 = length_of_side(p1,p3)
+    s = (side1 + side2 + side3) / 2
+    area = sqrt(s * (s - side1) * (s - side2) * (s - side3))
+    return round(area, 2)
+    
+p1 = Coordinate()
+p1.x = 1.5
+p1.y = -3.4
+p2= Coordinate()
+p2.x = 4.6
+p2.y = 5
+p3 = Coordinate()
+p3.x = 9.5
+p3.y= -3.4
+
+ans = area_of_triangle(p1, p2, p3)
+print(ans)
+
+#Question 5
+def describe_bmi(bmi): 
+    if bmi < 18.5:
+        describe_bmi = "nutritional deficiency"
+    if bmi >= 18.5 and bmi < 23:
+        describe_bmi = "low risk"
+    if  bmi >= 23 and bmi < 27.5: 
+        describe_bmi = "moderate risk"
+    else: 
+        describe_bmi = "high risk"
+    return describe_bmi
+
+#Question 6
+def letter_grade(mark):
+    letter_grade = None
+    if mark <= 100 and mark >= 90:
+        letter_grade = "A"
+    if mark >= 80 and mark < 90: 
+        letter_grade = "B" 
+    if mark >= 70 and mark < 80: 
+        letter_grade = "C" 
+    if mark >= 60 and mark < 70: 
+        letter_grade = "D" 
+    if mark >= 0 and mark < 60: 
+        letter_grade = "E"
+    return letter_grade
+
+#Question 7 
+class Coordinate: 
+   x = 0
+   y = 0
+    
+def is_in_square(square1, side1, square2, side2): 
+    xseparation = abs(square1.x - square2.x)
+    yseparation = abs(square1.y - square2.y)
+    mindistance = side1 / 2 + side2 / 2
+    
+    if (xseparation > mindistance or yseparation > mindistance): 
+        return False 
+    else: 
+        return True
+        
+#HW question 1
+def fahrenheit_to_celcius(temp):
+    conversion = (temp - 32) * ( 5 / 9 )
+    return conversion
+
+print(fahrenheit_to_celcius(32))
+
+#HW question 2
+def celcius_to_fahrenheit(temp):
+    conversion = (temp * (9 / 5)) + 32
+    return conversion
+
+print(celcius_to_fahrenheit(0))
+
+#HW Question 3
+def area_vol_cylinder(radius, length):
+    area = radius * radius * 3.14159
+    volume = area * length
+    return round(area, 2) , round(volume, 2)
+
+print(area_vol_cylinder(1.0,2.0))
+
+#HW Question 4
+def wind_chill_temp(temp,speed):
+    temp = 35.74 + 0.6215 * temp - 35.75 * (speed ** 0.16) + 0.4275 * temp * (speed ** 0.16)
+    return temp
+
+#HW Question 5
+def minutes_to_years_days(minutes):
+    years = minutes // (365 * 24 * 60)
+    days = (minutes - years*525600) // (24 * 60)
+    return years, days
+
+print(minutes_to_years_days(1000000000))
+
+#Question 6
+def investment_val(amt, rate, years):
+    fiv = amt * ((1 + (rate/1200)) ** (years * 12))
+    return round(fiv, 2)
+
+print(investment_val(1000, 4.25, 1))
+
+#Question 7
+def is_larger(n1,n2):
+    if n1 > n2: 
+        is_larger = True 
+    else: 
+        is_larger = False
+    return is_larger
+
+#Question 8 
+def check_value(n1,n2,n3,x):
+    if x > n1 and x > n2 and x < n3: 
+        check_value = True
+    else:
+        check_value = False
+    return check_value
+
+
+    
+    
