@@ -1,0 +1,200 @@
+"""
+Created on Mon Mar 25 09:44:35 2019
+
+@author: Alice Jingyu
+"""
+
+from libdw import sm
+ 
+class TorchLight(sm.SM):
+    #automatically has start,step, transduce, etc since it's part of the library. 
+    #dont use init method cause we are using sm.SM to initialise
+    start_state = 0
+    
+    def get_next_values(self,state,inp):
+        assert(0 <= state <= 1)
+        assert(inp == 'push')
+        
+        if state == 0 and inp == 'push':
+            next_state = 1
+            output = 'on'
+        if state == 1 and inp == 'push':
+            next_state = 0
+            output = 'off'
+        
+        return next_state, output
+    
+''' how to execute on interactive kernel:
+    
+s = TorchLight () #name your state machine
+
+s.start() #start the process
+
+s.step("push") #step is to put input 
+Out[5]: 'on'
+
+s.step("push")
+Out[6]: 'off' 
+
+OR
+s.transduce(["push"] * 7)
+Out[8]: ['on', 'off', 'on', 'off', 'on', 'off', 'on']
+'''
+class LanguageAcceptor(sm.SM):
+    start_state = 0
+    
+    def get_next_value(self,state,inp):
+        assert(0 <= state <= 3)
+        assert(inp in 'abc' and len(inp) == 1)
+        
+        if state == 0 and inp =='a':
+            next_state = 1
+            output == True
+        elif state == 1 and inp =='b':
+            next_state = 2
+            output = True
+        elif state == 2 and inp == 'c':
+            next_state = 0
+            output = True 
+        else:
+            next_state = 3 
+            output = False
+        return next_state, output
+    
+class UpAndDown(sm.SM):
+    start_state = 0 
+    
+    def get_next_values(self,state,inp):
+        assert( state >= 0)
+        assert(inp == 'up' or inp == 'down')
+
+        if inp == "up":
+            next_state = state +1
+            output = next_state 
+        if inp == 'down':
+            next_state = state -1
+            output = next_state
+            
+        return next_state, output
+    
+#Cohort Question 1
+class CM(sm.SM):
+    start_state = 0
+
+    def get_next_values(self,state, inp):  #is a method so always need object reference on 'self'
+        assert( 0 <= state <= 1)
+        assert( inp == 50 or inp == 100)
+        
+        if state == 0 and inp == 50:
+            next_state = 1
+            #current_amount = start_state + inp
+            output = [inp, "--", 0]
+        elif state == 1 and inp == 50:
+            next_state = 0 
+            #current_amount = start_state + 100
+            output = [0,"coke",0]
+        elif state == 1 and inp == 100:
+            next_state = 0 
+            #current_amount = start_state + 150
+            output = [0,"coke",50]
+        elif state == 0 and inp == 100:
+            next_state = 0 
+            #current_amount = start_state + inp
+            output = [0,"coke",0]
+        elif state == 1 and inp != 50 and inp != 100:
+            current_amount = 50
+            next_state = 1
+            output = [current_amount,"--",inp]
+        else:
+            next_state= 0 
+            output = [0,"--",inp]
+        
+            
+        return next_state, tuple(output)
+    
+#Cohort Question 2
+class SimpleAccount(sm.SM):
+    def __init__(self, val):
+        self.start_state = val
+    
+    def get_next_values(self,state,inp):
+        assert(inp >= 0)
+        
+        if state >= 100:
+            next_state = state + inp
+            output = next_state 
+        if state <= 100:
+            next_state = state + inp - 5
+            output = next_state 
+            
+        return next_state, output
+
+#HW 1
+class CommentsSM(sm.SM):
+    start_state = None
+
+    def get_next_values(self, state, inp):
+        assert(type(inp) == str)
+        next_state = None
+        output = None
+        
+        for char in inp:
+            if char != '#' and state == None:
+                next_state = None 
+                output = None
+                
+            elif char == '#' and state == None:
+                next_state = 1
+                output = char
+            
+            elif state == 1 and char != '\n':
+                next_state = 1
+                output = char
+                
+            elif state == 1 and char == '\n':
+                next_state = None 
+                output = None
+        
+        
+        return next_state, output
+    
+#HW 2
+class FirstWordSM(sm.SM):
+    start_state = None
+
+    def get_next_values(self, state, inp):
+        assert(type(inp) == str)
+        
+        next_state = None 
+        output = None 
+        
+        for char in inp: 
+            
+            if state == None and char == '\n':
+                next_state = None
+                output = None 
+            elif state == None and char != ' ':
+                next_state = 1
+                output = char    
+            elif state == None and char == ' ':
+                next_state = None
+                output = None
+                
+            
+            elif state == 1 and char != ' ':
+                next_state = 1
+                output = char
+            elif state == 1 and char == ' ':
+                next_state = 2
+                output = None 
+            
+            elif state == 2 and char == '\n':
+                next_state = None
+                output = None 
+            elif state == 2 and char != '\n':
+                next_state = 2
+                output = None
+            
+            
+                
+        return next_state, output
