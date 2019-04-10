@@ -1,0 +1,195 @@
+"""
+Created on Tue Mar 26 17:20:44 2019
+
+@author: Alice Jingyu
+"""
+
+#HW 1
+class Time:
+    _hours = 0
+    _minutes = 0
+    _seconds = 0
+    
+    def __init__(self, _hours,_minutes,_seconds):
+        self._hours = _hours 
+        self._minutes = _minutes
+        self._seconds = _seconds
+        
+    def get_elapsedtime(self):
+        total_seconds = self._hours * 60 * 60 + self._minutes * 60 + self._seconds
+        return total_seconds
+    
+    def set_elapsedtime(self, val):
+        self._hours = val // (60*60) % 24
+        self._minutes = (val % (60*60)) // 60 
+        self._seconds = (val % (60*60)) % 60 
+        
+    def __str__(self):
+        return "Time: {}:{}:{}".format(self._hours,self._minutes,self._seconds)
+    
+    elapsed_time = property(get_elapsedtime, set_elapsedtime)
+
+#HW 2
+class Account:    
+    
+    def __init__(self,owner,account_number,amount):
+        self._owner = owner
+        self._account_number = account_number
+        self._balance = amount
+        
+    def deposit(self,amount):
+        self._balance += amount 
+        return self._balance
+    
+    def withdraw(self,amount):
+        self._balance -= amount 
+        return self._balance
+        
+    def __str__(self):
+        print("{},{},balance:{}".format(self._owner,self._account_number,self._balance))
+
+#HW 3
+class Diff:
+    def __init__(self,function,h = (10)**(-4)):
+        self.h = h
+        self.function = function
+        
+    def __call__(self, x):
+        derivative = (self.function(x + self.h) - self.function(x))/self.h
+        return derivative
+    
+#HW 4
+class Polynomial:
+    
+    def __init__(self, coefficients):
+        self.coeff = coefficients
+        
+    def zip_longest(a,b):    
+        for i in range(max(len(a),len(b))):
+            if i >= len(a):
+                yield [b[i]]
+            elif i >= len(b):
+                yield [a[i]]
+            else:
+                yield [a[i], b[i]]
+            i += 1
+        
+    def __add__(self, target):
+        return Polynomial([sum(i) for i in Polynomial.zip_longest(self.coeff, target.coeff)])
+    
+    def __sub__(self, target):
+        return Polynomial([sum(i) for i in Polynomial.zip_longest(self.coeff,[-i for i in target.coeff])])
+    
+    def __call__(self, x):
+        val = []
+        for i,j in enumerate(self.coeff):
+            val.append(j * x ** i)
+        return sum(val)
+    
+    def __mul__(self, target):
+        ls = [0]*(len(self.coeff)*len(target.coeff)-1)
+        for i,j in enumerate(self.coeff):
+            for k,l in enumerate(target.coeff):
+                ls[i+k] += j*l
+        end = len(ls)        
+        for i in ls[::-1]:
+            if i != 0.:
+                break
+            else:
+                end -= 1        
+        return Polynomial(ls[0:end])   
+    
+    def differentiate(self):
+        ls = [0]*(len(self.coeff)-1)  
+        for i,j in enumerate(self.coeff):
+            ls[i-1] += i*j 
+        self.coeff = ls
+                          
+    def derivative(self):
+        deriv = []
+        power = 1
+        for i in range(1, len(self.coeff)):
+            deriv.append(self.coeff[i] * power)
+            power += 1
+        return Polynomial(deriv)
+        
+"""
+Created on Tue Apr  2 13:57:33 2019
+
+@author: Alice Jingyu
+"""
+
+#Week 8 HW 1
+from libdw import sm
+
+class CommentsSM(sm.SM):
+    start_state = None
+
+    def get_next_values(self, state, inp):
+        assert(type(inp) == str)
+        next_state = None
+        output = None
+        
+        for char in inp:
+            if char != '#' and state == None:
+                next_state = None 
+                output = None
+                
+            elif char == '#' and state == None:
+                next_state = 1
+                output = char
+            
+            elif state == 1 and char != '\n':
+                next_state = 1
+                output = char
+                
+            elif state == 1 and char == '\n':
+                next_state = None 
+                output = None
+        
+        
+        return (next_state, output)
+    
+# Week 8 HW 2
+from libdw import sm
+
+class FirstWordSM(sm.SM):
+    start_state = None
+
+    def get_next_values(self, state, inp):
+        assert(type(inp) == str)
+        
+        next_state = None 
+        output = None 
+        
+        for char in inp: 
+            
+            if state == None and char == '\n':
+                next_state = None
+                output = None 
+            elif state == None and char != ' ':
+                next_state = 1
+                output = char    
+            elif state == None and char == ' ':
+                next_state = None
+                output = None
+                
+            
+            elif state == 1 and char != ' ':
+                next_state = 1
+                output = char
+            elif state == 1 and char == ' ':
+                next_state = 2
+                output = None 
+            
+            elif state == 2 and char == '\n':
+                next_state = None
+                output = None 
+            elif state == 2 and char != '\n':
+                next_state = 2
+                output = None
+            
+            
+                
+        return next_state, output
+
