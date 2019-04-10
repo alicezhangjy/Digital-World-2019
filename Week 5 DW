@@ -173,3 +173,48 @@ def fact_rec(n):
     else: 
         answer = n * fact_rec(n-1)
         return answer
+        
+"""
+Created on Wed Apr 10 21:34:14 2019
+
+@author: Alice Jingyu
+"""
+
+#HW 1
+# NB: you do not need to submit the 'get_data' function
+
+def extract_values(values):
+    first,second = values.split(" ", 1)
+    answer = (int(first),int(second))
+    return answer
+
+def calc_ratios(values):
+    if values[1] == 0:
+        ratio = None
+    else:
+        ratio = values[0] / values[1]
+    return ratio
+
+#HW 2
+# NB: the following line imports the 'display_calendar', 'lear_year', etc. functions
+# (see the problem sheet PDF)
+# DO NOT delete hw2_others.pyc from Vocareum :-)
+from hw2_others import *
+
+# You should ONLY submit the 'display_calendar_modified' function
+
+def display_calendar_modified(year, month):
+    if month == None: 
+        calendar = display_calendar(year)
+    else: 
+        month_i_need = (construct_cal_year(year)[month])
+        calendar = ""
+        
+        for week in range(len(month_i_need)):
+            calendar += month_i_need[week] + "\n"
+            if week == 0:
+                calendar += "  S  M  T  W  T  F  S\n"
+        calendar += "\n"
+
+    return calendar.strip()
+        
