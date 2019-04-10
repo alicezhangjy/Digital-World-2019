@@ -1,5 +1,5 @@
 #Week 3
-#Question 1
+#Deg,Rad
 
 import numpy as py
 import scipy.constants as c
@@ -14,7 +14,7 @@ def rad_to_deg(rad):
     result_rounded = round(result,5)
     return result_rounded
     
-#Question 2
+#Cart,Sphe
 import numpy as np
 
 def spherical_to_cartesian(r,theta,phi):
@@ -34,3 +34,270 @@ def cartesian_to_spherical(x, y, z):
         
     return round(r,5), round(phi,5), round(theta,5)
     
+#Week 4
+#Angular Solution
+
+import scipy.constants as c
+import numpy as np
+
+def angular_wave_func(m,l,theta,phi):
+    if m == 0 and l == 0:
+        return np.complex(np.round((np.sqrt(1/(4*c.pi))),5))
+    elif m == 0 and  l == 1:
+        return np.complex(np.round(np.sqrt(3/(4*c.pi))*np.cos(theta),5))
+    elif m == 1 and l == 1: 
+        return -1*np.complex(np.round(np.sqrt(3/(8*c.pi))*np.exp(1j*phi)*np.sin(theta),5))
+    elif m == 0 and l ==2 :
+        return np.complex(np.round(np.sqrt(5/(16*c.pi))*((3*(np.cos(theta)**2)-1)),5))
+
+#Radial Solution
+import scipy.constants as c
+import numpy as np 
+
+
+def radial_wave_func(n,l,r):
+    a=c.physical_constants['Bohr radius'][0]
+    s = r/a
+    if n == 1 and l == 0:
+        return np.round((2*np.exp(-s)),5)
+    elif n == 2 and l == 1: 
+        return np.round((np.sqrt(1/24) * (s) * np.exp(-s/2)),5)
+    elif n == 3 and l == 1:
+        return np.round((np.sqrt(16/39366) * (6*(s)-(s)**2) * np.exp(-s/3)),5)
+
+#Week 5
+#2d grid
+def mgrid2d(xstart, xend, xpoints, ystart, yend, ypoints):
+        x = (xend-xstart)/(xpoints-1)
+        y = (yend-ystart)/(ypoints-1)
+        output = [[],[]]
+        for i in range(xpoints):
+            list1 = []
+            list2 = []
+            newy = ystart
+            for j in range(ypoints):
+                list1.append(xstart)
+                list2.append(newy)
+                newy+=y
+            output[0].append(list1)
+            output[1].append(list2)
+            xstart += x
+        return output
+
+#3d grid
+def mgrid2d(xstart, xend, xpoints, ystart, yend, ypoints):
+    lst = []
+    
+    xlst = []
+    xstep = (xend - xstart) / (xpoints - 1)
+    for i in range(xpoints):                # no. of rows = no. of x points
+        xrow = []
+        x = xstart + i*xstep
+        for col in range(ypoints):          # no. of columns = no. of y points
+            xrow.append(x)
+        xlst.append(xrow)
+    lst.append(xlst)
+    
+    ylst = []
+    ystep = (yend - ystart) / (ypoints - 1)
+    for row in range(xpoints):              # no. of rows = no. of x points
+        yrow = []
+        for j in range(ypoints):            # no. of columns = no. of y points
+            y = ystart + j*ystep
+            yrow.append(y)
+        ylst.append(yrow)
+    lst.append(ylst)
+    
+    return lst
+
+def mgrid3d(xstart, xend, xpoints, ystart, yend, ypoints, zstart, zend, zpoints):
+    lst = []
+    
+    biglst1 = []
+    xstep = (xend - xstart) / (xpoints - 1) 
+    for i in range(xpoints):           # for one matrix in biglst1
+        x = xstart + i*xstep
+        matrix = []
+        for row in range(ypoints):
+            rowlst = []
+            for col in range(zpoints):
+                rowlst.append(x)
+            matrix.append(rowlst)
+        biglst1.append(matrix)
+            
+    biglst2 = []
+    lst2_lst = mgrid2d(ystart, yend, ypoints, zstart, zend, zpoints)[0]
+    for i in range(xpoints):
+        biglst2.append(lst2_lst)
+    
+    biglst3 = []
+    lst3_lst = mgrid2d(ystart, yend, ypoints, zstart, zend, zpoints)[1]
+    for i in range(xpoints):
+        biglst3.append(lst3_lst)
+        
+    lst.append(biglst1)
+    lst.append(biglst2)
+    lst.append(biglst3)
+    
+    return lst
+    
+#Week 6 
+#Everything with Hydrogen Wave Function 
+
+import numpy as np
+import scipy.constants as c
+from math import pi, sqrt, cos, factorial, e
+
+def spherical_to_cartesian(r,theta,phi):
+    x = r * np.sin(theta) * np.cos(phi) 
+    y = r * np.sin(theta) * np.sin(phi) 
+    z = r * np.cos(theta)
+    return round(x,5), round(y,5), round(z,5)
+
+def cartesian_to_spherical(x, y, z):
+    r = np.sqrt((x ** 2) + (y ** 2 ) + (z ** 2))
+    phi = np.arccos(z / r)
+    try:
+        theta = np.arctan(y / x)
+        
+    except ZeroDivisionError:
+        theta = 0.0
+        
+    return round(r,5), round(phi,5), round(theta,5)
+
+absolute = lambda cn: ((cn).real**2 + (cn).imag**2)**.5
+
+def angular_wave_func(m,l,theta,phi):
+    eps = -1**m if m > 0 else 1
+    expr = sqrt((((2*l) + 1) * factorial(l - abs(m))) / ((4.0*pi) * factorial(l + abs(m))))
+    p = assoc_legendre(m, l)(theta)
+    e_part = (e**(m*phi*1j))
+    y = eps * expr * e_part * p
+    return np.round(y, 5)
+
+ 
+def legendre(l):
+    if l == 0:
+        return lambda x: 1 
+    p = np.poly1d([1, 0, -1]).__pow__(l) 
+    p_deriv = p.deriv(l) 
+    legendre_pol = p_deriv/(2**l * factorial(l))
+ 
+    def getpol(theta):
+        pol = 0
+        for power, coeff in enumerate(legendre_pol):
+            pol += coeff*(cos(theta)**power)
+        return pol
+     
+    return legendre_pol 
+     
+def assoc_legendre(m,l):
+    if l == 0 and m == 0:
+        return lambda x: 1 
+ 
+    if abs(m) <= l:
+        legendre_pol = legendre(l)
+        legendre_pol_deriv = legendre_pol.deriv(abs(m)) if m != 0 else legendre_pol
+ 
+        def getassoc(theta):
+            return legendre_pol_deriv(cos(theta))*((1 - cos(theta)**2)**abs(m/2.0))
+        return getassoc 
+    else:
+        return lambda x: "m cannot be greater than l"
+
+
+def radial_wave_func(n, l, r):
+    a=c.physical_constants['Bohr radius'][0]
+    p = 2*l +1
+    qmp = n - l -1
+    x = (2*r)/(n*a)
+    lfunc= assoc_laguerre(p,qmp)
+    y = lfunc(x)
+    norm_rad_sol = (sqrt(((2/(n*a))**3)*((factorial(qmp)/(2.0*n*(factorial(n +l))**3))))*np.exp(-r/(n*a))*x**l*y)/a**(-1.5)
+    return np.round(norm_rad_sol,5)
+
+def laguerre(q):
+    def pascal(rows): 
+        for rownum in range (rows):
+            new_val = 1
+            psc = [new_val]
+            for iteration in range (rownum):
+                new_val = new_val * (rownum - iteration) * 1 / (iteration + 1)
+                psc.append(int(new_val))
+        return psc
+    coef = []
+    for term in range(q + 1):
+        c = ((-1)**(q + term))*(pascal(q + 1)[term])*(factorial(q)/factorial(q - term))
+        coef.append(c)
+    return np.poly1d(coef) 
+
+def assoc_laguerre(p, qmp):
+    q = qmp + p
+    lag = laguerre(q)
+    lag_der = lag.deriv(p)
+ 
+    def getassoc(x):
+        value = (-1**p) * lag_der(x)
+        return value
+    return getassoc
+
+def linspace(start,stop,num=50):
+    diff = stop - start
+    increment = diff / (num - 1) 
+    ans_list = [] 
+    ans_list.append(start) 
+    i = start + increment 
+    while abs(i - stop) > 1e-10: 
+        ans_list.append(round(i,5))
+        i+=increment
+    ans_list.append(stop)
+    return ans_list
+
+def mgrid3d(*args):
+    output_list = []
+    
+    x_list = []
+    inner_list = []
+    inner_list.append([[round(float(x), 1)] * len(args[2]) for x in args[0]])
+    for i in inner_list:
+        x_list += [i] * len(args[1])
+    output_list.append(x_list)
+
+    y_list = []
+    inner_list = [[round(float(x), 1)] * len(args[2]) for x in args[1]]
+    y_list = [[x] * len(args[0]) for x in inner_list]
+    output_list.append(y_list)
+
+    z_list = []  
+    for i in args[-1]:
+        z_list.append(round(float(i), 1))
+        
+    mixing_list = []     
+    for i in range(len(args[0])):
+        mixing_list.append(z_list) 
+        
+    all_list = []    
+    for i in args[1]:
+        all_list.append(mixing_list)     
+    output_list.append(all_list)
+    
+    return tuple(output_list)
+
+
+def hydrogen_wave_func(n,l, m, roa, Nx, Ny, Nz):
+    X = linspace(-roa, roa, Nx)
+    Y = linspace(-roa, roa, Ny)
+    Z = linspace(-roa, roa, Nz)
+    xx,yy,zz=mgrid3d(Y,X,Z)
+    cart_to_sphe = np.vectorize(cartesian_to_spherical)
+    ang_wave_func = np.vectorize(angular_wave_func)
+    rad_wave_func = np.vectorize(radial_wave_func)
+    mag = np.vectorize(absolute)   
+    R,THETA,PHI =cart_to_sphe(yy,xx,zz)
+    if m < 0:
+        awf_real = (1j/sqrt(2))*(ang_wave_func(m,l,THETA,PHI) - (-1)**m*ang_wave_func(-m,l,THETA,PHI))
+    elif m > 0:
+        awf_real = (1/sqrt(2))*(ang_wave_func(-m,l,THETA,PHI) + (-1)**m*ang_wave_func(m,l,THETA,PHI)) 
+    elif m == 0:
+        awf_real = ang_wave_func(0,l,THETA,PHI)       
+    return np.array(yy), np.array(xx), np.array(zz), np.round(mag(np.round(awf_real,5)*(rad_wave_func(n,l,R*c.physical_constants['Bohr radius'][0])))**2,5)
